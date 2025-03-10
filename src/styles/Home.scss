@@ -1,0 +1,153 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 640px;
+    width: 100%;
+    padding: 3rem 2rem;
+}
+
+.title{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    user-select: none;
+
+    img{
+        width: 72px;
+        height: 72px;
+    }
+
+    h1{
+        font-size: 36px;
+        font-weight: 700;
+        color: #09090b;
+        margin: 12px 0 8px;
+    }
+
+    p{
+        font-size: 14px;
+        font-weight: 500;
+        color: #71717a;
+    }
+}
+
+form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+
+    input{
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        font-weight: 400;
+        outline: none;
+        background: #fff;
+        border: 1px solid #e4e4e7;
+        border-radius: 0.3rem;
+        direction: ltr;
+
+        &::placeholder{
+            color: #999;
+            font-size: 14px;
+        }
+
+        &:focus, &:focus-visible, &:active{
+            border: 1px solid #09090b;
+        }
+    }
+}
+
+.url-list{
+    width: 100%;
+
+    h2{
+        font-size: 24px;
+        margin-bottom: 12px;
+        font-weight: 600;
+        user-select: none;
+    }
+}
+
+.url-item{
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    padding: 12px;
+    border-radius: 0.3rem;
+    margin-bottom: 6px;
+    gap: 16px;
+
+    &:last-child{
+        margin-bottom: 0;
+    }
+
+    .links{
+        display: flex;
+        flex-direction: column;
+
+        .orglink{
+            font-size: 14px;
+            font-weight: 400;
+            cursor: help;
+            width: fit-content;
+        }
+
+        .shortlink{
+            color: #3b82f6;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .tools{
+        display: flex;
+        justify-content: end;
+        gap: 18px;
+
+        .copy{
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            color: #51515a;
+
+            &:hover{
+                background: #f4f4f5;
+            }
+
+            .check{
+                color: #10b981;
+            }
+        }
+
+        .view{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-family: sans-serif;
+            user-select: none;
+            gap: 4px;
+            font-size: 14px;
+            color: #19191b;
+        }
+    }
+}

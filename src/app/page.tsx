@@ -1,95 +1,85 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+/* eslint-disable @next/next/no-img-element */
+import "../styles/Home.scss"
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { FaEye } from "react-icons/fa6";
+import { supabase } from "@/supabase";
+import { revalidateTag } from "next/cache";
+import Button from "@/components/Button";
+import CopyURL from "@/components/CopyURL";
+import logo from '../../public/logo.png'
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+interface Item {
+  id: number
+  originallink: string
+  shortcode: string
+  views: number
 }
+
+const Home = async () => {
+
+  const CutIt = async (formData: FormData) => {
+    'use server'
+
+    const generateShortCode = (length = 8) => {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    }
+
+    const newURL = {
+      originallink: formData.get("url"),
+      shortcode: generateShortCode()
+    }
+
+    if (!newURL.originallink) return;
+
+    let { data } = await supabase.from("url").select("id").eq("shortcode", newURL.shortcode);
+    while (data && data.length > 0) {
+      newURL.shortcode = generateShortCode();
+      ({ data } = await supabase.from("url").select("id").eq("shortcode", newURL.shortcode));
+    }
+
+    await supabase.from("url").insert([newURL]);
+
+    revalidateTag('url')
+  }
+
+  const { data: urlItems } = await supabase.from("url").select("*").order('id', { ascending: false })
+
+  return (
+    <div className="wrapper">
+      <div className="title">
+        <img src={logo.src} alt="Logo" />
+        <h1>لینکو: کوتاه‌کننده لینک</h1>
+        <p>به راحتی لینک‌های اجق‌وجق خود را قیچی کنین و به اشتراک بذارین!</p>
+      </div>
+      <form action={CutIt}>
+        <input type="text" name="url" placeholder="Enter URL to Shorten" />
+        <Button classname="submit">«قیچی‌»ـش کن!</Button>
+      </form>
+      {urlItems?.length ?
+        <div className="url-list">
+          <h2>لینک‌های اخیر:</h2>
+          {urlItems.map((item: Item) =>
+          <div className="url-item" key={item.id}>
+            <div className="links">
+              <span title={item.originallink} className="orglink">{item.originallink.slice(0, 32) + '...'}</span>
+              <a href={`${process.env.NEXT_PUBLIC_SITE_URL}/${item.shortcode}`} className="shortlink">
+                {process.env.NEXT_PUBLIC_SITE_URL}/{item.shortcode}
+              </a>
+            </div>
+            <span className="tools">
+              <CopyURL shortcode={item.shortcode} />
+              <span className="view">
+                <FaEye />
+                {item.views == 0 || 1 ? `${item.views} View` : ""}
+                {item.views > 1 ? `${item.views} Views` : ""}
+              </span>
+            </span>
+          </div>)}
+        </div>
+        : ""}
+    </div>
+  )
+}
+
+export default Home
