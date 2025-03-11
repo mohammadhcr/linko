@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { supabase } from "@/supabase";
+import NotFound from "../not-found";
 
 const ShortLinkPage = async ({
   params,
@@ -14,7 +15,7 @@ const ShortLinkPage = async ({
     .eq("shortcode", url)
     .single();
 
-  if (error || !data) return <h1>404 - لینک یافت نشد!</h1>;
+  if (error || !data) return <NotFound />;
 
   const safeRedirect = (url: string) => {
     if (!/^https?:\/\//i.test(url)) {
