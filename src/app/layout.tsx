@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import localFont from 'next/font/local'
+import localFont from "next/font/local";
 
 export const metadata: Metadata = {
   title: "لینکو | وب‌سایت کوتاه‌کننده لینک",
@@ -10,27 +10,27 @@ export const metadata: Metadata = {
 const peyda = localFont({
   src: [
     {
-      path: '../../public/Peyda-Regular.ttf',
-      weight: '400',
-      style: 'normal',
+      path: "../../public/Peyda-Regular.ttf",
+      weight: "400",
+      style: "normal",
     },
     {
-      path: '../../public/Peyda-Medium.ttf',
-      weight: '500',
-      style: 'normal',
+      path: "../../public/Peyda-Medium.ttf",
+      weight: "500",
+      style: "normal",
     },
     {
-      path: '../../public/Peyda-SemiBold.ttf',
-      weight: '600',
-      style: 'normal',
+      path: "../../public/Peyda-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
     },
     {
-      path: '../../public/Peyda-Bold.ttf',
-      weight: '700',
-      style: 'normal',
+      path: "../../public/Peyda-Bold.ttf",
+      weight: "700",
+      style: "normal",
     },
   ],
-})
+});
 
 export default function RootLayout({
   children,
@@ -39,9 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa">
-      <body className={peyda.className}>
-        {children}
-      </body>
+      <body className={peyda.className}>{children}</body>
     </html>
   );
 }

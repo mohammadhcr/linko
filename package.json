@@ -1,5 +1,5 @@
 {
-  "name": "urlshortener",
+  "name": "linko_url_shortener",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
+    "prettier": "^3.5.3",
     "typescript": "^5"
   }
 }
